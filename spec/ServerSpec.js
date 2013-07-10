@@ -1,7 +1,8 @@
 var handler = require("../web/request-handler");
-handler.datadir = __dirname + "testdata/sites.txt";
+var datadir = handler.datadir(__dirname, "testdata/sites.txt");
 var stubs = require("./helpers/stubs");
 var res;
+var fs = require('fs');
 
 // allows us to run tests async
 function async(cb){
@@ -33,18 +34,18 @@ describe("Node Server Request Listener Function", function() {
       expect(res._responseCode).toEqual(200);
       expect(res._data).toMatch(/google/); // the resulting html should have the text "google"
       expect(res._ended).toEqual(true);
-    })
+    });
   });
 
   it("Should accept posts to /", function() {
-    fs.writeFileSync(handler.datadir, ""); // reset the test file
+    fs.writeFileSync(datadir, ""); // reset the test file
 
     var url = "www.example.com";
     var req = new stubs.Request("http://127.0.0.1:8080/", "POST", {url: url});
 
     handler.handleRequest(req, res);
 
-    var fileContents = fs.readFileSync(handler.datadir);
+    var fileContents = fs.readFileSync(datadir);
     expect(res._responseCode).toEqual(302);
     expect(fileContents).toEqual(url + "\n");
     expect(res._ended).toEqual(true);
