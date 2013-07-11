@@ -1,5 +1,5 @@
 var handler = require("../web/request-handler");
-var datadir = handler.datadir(__dirname, "testdata/sites.txt");
+var datadir = handler.datadir(__dirname, "/testdata/sites.txt");
 var stubs = require("./helpers/stubs");
 var res;
 var fs = require('fs');
@@ -45,7 +45,7 @@ describe("Node Server Request Listener Function", function() {
 
     handler.handleRequest(req, res);
 
-    var fileContents = fs.readFileSync(datadir);
+    var fileContents = fs.readFileSync(datadir, 'utf8');
     expect(res._responseCode).toEqual(302);
     expect(fileContents).toEqual(url + "\n");
     expect(res._ended).toEqual(true);

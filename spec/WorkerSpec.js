@@ -5,22 +5,22 @@ var fs = require("fs");
 describe("html fetcher helpers", function(){
 
   it("should have a 'readUrls' function", function(){
-    var urlArray = ["example1.com", "example2.com"];
+    var urlArray = ["wikipedia.com", "google.com"];
+    var filePath = __dirname + "/testdata/sites.txt";
 
-    fs.writeFileSync(__dirname + "/testdata/sites.txt", urlArray.join("\n"));
+    fs.writeFileSync(filePath, urlArray.join("\n"));
 
     var resultArray = [];
-    var result = htmlFetcherHelpers.readUrls(urlArray, function(urls){
+    var result = htmlFetcherHelpers.readUrls(filePath, function(urls){
       resultArray.push(urls);
     });
-
     waits(200);
     runs(function(){
       expect(resultArray).toEqual(urlArray);
     });
   });
-  
-  xit("should have a 'downloadUrls' function", function(){
+
+  it("should have a 'downloadUrls' function", function(){
     var result = htmlFetcherHelpers.downloadUrls();
     expect(result).toBeTruthy();
   });
